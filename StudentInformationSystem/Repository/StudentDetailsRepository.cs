@@ -42,6 +42,9 @@ namespace StudentInformationSystem.Repository
 
         public async Task AddAsync(StudentDetails studentDetails)
         {
+            if (studentDetails.Address == null)
+                throw new Exception("No Address Provided");
+
             _dbContext.StudentDetails.Add(studentDetails);
             await _dbContext.SaveChangesAsync();
         }
