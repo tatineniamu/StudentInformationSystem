@@ -4,10 +4,14 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StudentInformationSystem.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using StudentInformationSystem.Repository;
+
 
 namespace StudentInformationSystem
 {
@@ -23,7 +27,11 @@ namespace StudentInformationSystem
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SISDatabase")));
+            services.AddScoped<IStudentDetailsRepository, StudentDetailsRepository>();
+            services.AddRazorPages();
+            //services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,10 +56,12 @@ namespace StudentInformationSystem
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
+
         }
     }
 }
