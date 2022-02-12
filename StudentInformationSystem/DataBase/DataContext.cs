@@ -12,7 +12,7 @@ namespace StudentInformationSystem.DataBase
     {
         protected readonly IConfiguration Configuration;
 
-        public DataContext(IConfiguration configuration)
+        public DataContext(DbContextOptions<DataContext> options = null, IConfiguration configuration = null) : base(options)
         {
             Configuration = configuration;
         }
@@ -20,7 +20,8 @@ namespace StudentInformationSystem.DataBase
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // connect to sql server with connection string from app settings
-            options.UseSqlServer(Configuration.GetConnectionString("SISDatabase"));
+            if (Configuration != null)
+                options.UseSqlServer(Configuration.GetConnectionString("SISDatabase"));
         }
 
         public DbSet<StudentDetails> StudentDetails { get; set; }

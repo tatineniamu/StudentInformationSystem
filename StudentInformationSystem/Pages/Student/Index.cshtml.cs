@@ -5,25 +5,26 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using StudentInformationSystem.DataBase;
 using StudentInformationSystem.DataBase.Entities;
+using StudentInformationSystem.Repository;
 
 namespace StudentInformationSystem.Pages.Student
 {
     public class IndexModel : PageModel
     {
-        private readonly DataContext _context;
+        private readonly IStudentDetailsRepository _studentDetailsRepo;
 
-        public IndexModel(DataContext context)
+        public IndexModel(IStudentDetailsRepository studentDetailsRepo)
         {
-            _context = context;
+            _studentDetailsRepo = studentDetailsRepo;
         }
 
         public IList<StudentDetails> StudentDetails { get;set; }
 
         public async Task OnGetAsync()
         {
-            StudentDetails = await _context.StudentDetails.ToListAsync();
+            var students = await _studentDetailsRepo.GetAllAsync();
+            StudentDetails = students.ToList();
         }
     }
 }

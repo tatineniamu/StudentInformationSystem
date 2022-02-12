@@ -29,9 +29,10 @@ namespace StudentInformationSystem
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SISDatabase")));
-            services.AddScoped<IStudentDetailsRepository, StudentDetailsRepository>();
             services.AddRazorPages();
-            //services.AddMvc();
+
+            //register repositories
+            services.AddScoped<IStudentDetailsRepository, StudentDetailsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

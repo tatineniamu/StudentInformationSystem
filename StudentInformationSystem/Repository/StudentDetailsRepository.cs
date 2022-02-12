@@ -10,6 +10,11 @@ namespace StudentInformationSystem.Repository
 {
     public interface IStudentDetailsRepository {
         Task<IEnumerable<StudentDetails>> GetAllAsync();
+        bool CheckStudentExists(int id);
+        Task<StudentDetails> GetById(int id);
+        Task AddAsync(StudentDetails studentDetails);
+        Task UpdateAsync(StudentDetails studentDetails);
+        Task DeleteAsync(StudentDetails studentDetails);
     }
     
     public class StudentDetailsRepository: IStudentDetailsRepository
@@ -25,9 +30,34 @@ namespace StudentInformationSystem.Repository
             return await _dbContext.StudentDetails.ToListAsync();
         }
 
-        public Task AddAsync(StudentDetails studentDetails)
+        public bool CheckStudentExists(int id)
         {
-            throw new NotImplementedException();
+            return _dbContext.StudentDetails.Any(e => e.Id == id);
+        }
+
+        public async Task<StudentDetails> GetById(int id)
+        {
+            return await _dbContext.StudentDetails.Include(i => i.Address).FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task AddAsync(StudentDetails studentDetails)
+        {
+            _dbContext.StudentDetails.Add(studentDetails);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(StudentDetails studentDetails)
+        {
+            _dbContext.Attach(studentDetails).State = EntityState.Modified;
+            _dbContext.Attach(studentDetails.Address).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(StudentDetails studentDetails)
+        {
+            _dbContext.Address.Remove(studentDetails.Address);
+            _dbContext.StudentDetails.Remove(studentDetails);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

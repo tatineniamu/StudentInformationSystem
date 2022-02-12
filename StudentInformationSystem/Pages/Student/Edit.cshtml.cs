@@ -4,20 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using StudentInformationSystem.DataBase;
 using StudentInformationSystem.DataBase.Entities;
+using StudentInformationSystem.Repository;
 
 namespace StudentInformationSystem.Pages.Student
 {
     public class EditModel : PageModel
     {
-        private readonly StudentInformationSystem.DataBase.DataContext _context;
+        private readonly IStudentDetailsRepository _studentDetailsRepo;
 
-        public EditModel(StudentInformationSystem.DataBase.DataContext context)
+        public EditModel(IStudentDetailsRepository studentDetailsRepo)
         {
-            _context = context;
+            _studentDetailsRepo = studentDetailsRepo;
         }
 
         [BindProperty]
@@ -26,16 +25,13 @@ namespace StudentInformationSystem.Pages.Student
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            StudentDetails = await _context.StudentDetails.Include(i => i.Address).FirstOrDefaultAsync(m => m.Id == id);
+            StudentDetails = await _studentDetailsRepo.GetById((int)id);
 
             if (StudentDetails == null)
-            {
                 return NotFound();
-            }
+            
             return Page();
         }
 
@@ -44,27 +40,18 @@ namespace StudentInformationSystem.Pages.Student
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
-
-            _context.Attach(StudentDetails).State = EntityState.Modified;
-            _context.Attach(StudentDetails.Address).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _studentDetailsRepo.UpdateAsync(StudentDetails);
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!StudentDetailsExists(StudentDetails.Id))
-                {
                     return NotFound();
-                }
                 else
-                {
                     throw;
-                }
             }
 
             return RedirectToPage("./Index");
@@ -72,7 +59,7 @@ namespace StudentInformationSystem.Pages.Student
 
         private bool StudentDetailsExists(int id)
         {
-            return _context.StudentDetails.Any(e => e.Id == id);
+            return _studentDetailsRepo.CheckStudentExists(id);
         }
     }
 }
