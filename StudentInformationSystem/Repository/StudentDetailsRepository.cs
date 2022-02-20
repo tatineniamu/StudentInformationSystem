@@ -12,6 +12,7 @@ namespace StudentInformationSystem.Repository
         Task<IEnumerable<StudentDetails>> GetAllAsync();
         bool CheckStudentExists(int id);
         Task<StudentDetails> GetById(int id);
+        Task<StudentDetails> GetByUserId(int id);
         Task AddAsync(StudentDetails studentDetails);
         Task UpdateAsync(StudentDetails studentDetails);
         Task DeleteAsync(StudentDetails studentDetails);
@@ -27,7 +28,13 @@ namespace StudentInformationSystem.Repository
 
         public async Task<IEnumerable<StudentDetails>> GetAllAsync()
         {
-            return await _dbContext.StudentDetails.ToListAsync();
+            try
+            {
+                return await _dbContext.StudentDetails.ToListAsync();
+            }
+            catch (Exception ex) {
+                throw ex;
+            }
         }
 
         public bool CheckStudentExists(int id)
@@ -38,6 +45,11 @@ namespace StudentInformationSystem.Repository
         public async Task<StudentDetails> GetById(int id)
         {
             return await _dbContext.StudentDetails.Include(i => i.Address).FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<StudentDetails> GetByUserId(int id)
+        {
+            return await _dbContext.StudentDetails.Include(i => i.Address).FirstOrDefaultAsync(m => m.UserId == id);
         }
 
         public async Task AddAsync(StudentDetails studentDetails)
