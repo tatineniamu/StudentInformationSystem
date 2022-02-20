@@ -1,0 +1,51 @@
+﻿@page
+@model StudentInformationSystem.Pages.Course.ListModel
+@{
+}
+
+<h3> Course Registration </h3>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Course Id
+            </th>
+            <th>
+                Couser Name
+            </th>
+            <th> Action </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Courses)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    <button onclick="onRegisterClick()" > Register </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    //function onRegisterClick() {
+    //    $.ajax({
+    //        url: '/Course',
+    //        type : 'POST',
+    //        contentType: 'application/json; charset=utf-8',
+    //        headers : {
+    //            RequestVerificationToken:
+    //                $('input:hidden[name="__RequestVerificationToken"]').val()
+    //        },
+    //    }).done(function (result) { })
+    //}
+</script>

@@ -11,7 +11,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using StudentInformationSystem.Repository;
-
+using Microsoft.AspNetCore.Http;
+using StudentInformationSystem.Services;
 
 namespace StudentInformationSystem
 {
@@ -30,9 +31,23 @@ namespace StudentInformationSystem
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SISDatabase")));
             services.AddRazorPages();
+            services.AddMvc().AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AddPageRoute("/login/login", "");
+            });
+            
+            //session services
+            services.AddDistributedMemoryCache();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
+            });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ISessionManager, SessionManager>();
 
             //register repositories
             services.AddScoped<IStudentDetailsRepository, StudentDetailsRepository>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +65,7 @@ namespace StudentInformationSystem
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();
