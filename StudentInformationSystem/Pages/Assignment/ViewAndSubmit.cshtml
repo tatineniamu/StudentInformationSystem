@@ -1,0 +1,36 @@
+﻿@page
+@model StudentInformationSystem.Pages.Assignment.ViewAndSubmitModel
+@{
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Topic Name
+            </th>
+            <th>
+               Due Date
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AssignmentViewModel.Assignments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TopicName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+                <td>
+                    <a href="/assignment/submit?assignmentId=@item.Id"> Click to submit </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

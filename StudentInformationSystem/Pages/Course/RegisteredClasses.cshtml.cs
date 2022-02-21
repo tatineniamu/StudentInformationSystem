@@ -18,10 +18,14 @@ namespace StudentInformationSystem.Pages.Course
             _courseRepo = courseRepo;
         }
 
+        [BindProperty]
+        public IList<DataBase.Entities.Course> Courses { get; set; }
+
         public async Task OnGet()
         {
             var studentId = HttpContext.Session.GetString("StudentId");
             var data = await _courseRepo.GetRegisteredCoursesAsync(Convert.ToInt32(studentId));
+            Courses = data.ToList();
         }
     }
 }

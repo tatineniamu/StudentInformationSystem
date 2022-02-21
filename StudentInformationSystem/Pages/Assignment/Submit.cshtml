@@ -1,0 +1,27 @@
+﻿@page
+@model StudentInformationSystem.Pages.Assignment.SubmitModel
+@{
+}
+
+<h3>Edit Student</h3>
+
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="HomeWork.Id" />
+            <input type="hidden" asp-for="HomeWork.StudentId" />
+            <input type="hidden" asp-for="HomeWork.AssignmentId" />
+            <div class="form-group">
+                <label> Enter you work below </label>
+                <textarea asp-for="HomeWork.SubmittedText" class="form-control" rows="20"> </textarea> 
+                <span asp-validation-for="HomeWork.SubmittedText" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
