@@ -48,6 +48,7 @@ namespace StudentInformationSystem
             services.AddScoped<IStudentDetailsRepository, StudentDetailsRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IAssignmentRepository, AssignmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,3 +2,38 @@
 @model StudentInformationSystem.Pages.Course.RegisteredClassesModel
 @{
 }
+
+<h3> Registered Classes </h3>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Course Id
+            </th>
+            <th>
+                Couser Name
+            </th>
+            <th> 
+                Action 
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Courses)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    <a href="/Assignment/ViewAndSubmit?courseId=@item.Id"> View Assignments </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

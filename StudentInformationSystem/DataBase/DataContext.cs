@@ -29,5 +29,8 @@ namespace StudentInformationSystem.DataBase
         public DbSet<Course> Course { get; set; }
         public DbSet<StudentCourse> StudentCourse { get; set; }
         public DbSet<Users> Users{ get; set; }
+        public DbSet<Assignments> Assignments { get; set; }
+        public DbSet<TeacherDetails> TeacherDetails { get; set; }
+        public DbSet<HomeWork> HomeWork { get; set; }
     }
 }
